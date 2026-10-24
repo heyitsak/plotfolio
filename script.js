@@ -1,7 +1,7 @@
 /**
  * Personal Portfolio — Core Scripts
  * Clean, lightweight Vanilla JS without external dependencies.
- * Author: Akhilesh Pratap Pandey (@heyitsak)
+ * Author: Ak (@heyitsak)
  */
 
 'use strict';
@@ -349,7 +349,7 @@ async function initLiveProjects() {
 function printConsoleWelcome() {
   const banner = `
   ┌──────────────────────────────────────────────┐
-  │  ✦ Crafted with care by Akhilesh (@heyitsak) │
+  │  ✦ Crafted with care by Ak (@heyitsak) │
   │  Discord-style dynamic banner architecture   │
   │  100% semantic HTML, vanilla CSS & modern JS │
   │  Thanks for inspecting! Have a great day. ☕ │
