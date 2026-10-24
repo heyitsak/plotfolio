@@ -7,7 +7,7 @@
 'use strict';
 
 // -----------------------------------------------------------------------------
-// Dynamic Banner Pool (Rotates on Page Refresh / Revisit)
+// Dynamic Banner Pool (Rotates on Page Refresh / Revisit & Click)
 // -----------------------------------------------------------------------------
 
 const BANNER_POOL = [
@@ -24,27 +24,53 @@ const BANNER_POOL = [
 
 const LAST_BANNER_KEY = 'portfolio-last-banner-idx';
 
+function getRandomBannerIndex(currentIdx) {
+  if (BANNER_POOL.length <= 1) return 0;
+  let nextIdx;
+  do {
+    nextIdx = Math.floor(Math.random() * BANNER_POOL.length);
+  } while (nextIdx === currentIdx);
+  return nextIdx;
+}
+
+function applyBanner(index) {
+  const bannerImg = document.getElementById('discord-banner');
+  if (!bannerImg || !BANNER_POOL[index]) return;
+
+  sessionStorage.setItem(LAST_BANNER_KEY, index.toString());
+
+  // Subtle smooth crossfade
+  bannerImg.style.opacity = '0.4';
+  const preloader = new Image();
+  preloader.src = BANNER_POOL[index];
+  preloader.onload = () => {
+    bannerImg.src = BANNER_POOL[index];
+    bannerImg.alt = `Profile aesthetic banner #${index + 1}`;
+    bannerImg.style.opacity = '1';
+  };
+}
+
 function initDynamicBanner() {
   const bannerImg = document.getElementById('discord-banner');
   if (!bannerImg || BANNER_POOL.length === 0) return;
 
   const lastIdx = parseInt(sessionStorage.getItem(LAST_BANNER_KEY), 10);
-  let nextIdx;
+  const initialIdx = isNaN(lastIdx) 
+    ? Math.floor(Math.random() * BANNER_POOL.length) 
+    : getRandomBannerIndex(lastIdx);
 
-  // Pick a random banner different from the previous one
-  if (!isNaN(lastIdx) && BANNER_POOL.length > 1) {
-    do {
-      nextIdx = Math.floor(Math.random() * BANNER_POOL.length);
-    } while (nextIdx === lastIdx);
-  } else {
-    nextIdx = Math.floor(Math.random() * BANNER_POOL.length);
+  applyBanner(initialIdx);
+
+  // Allow clicking the overlay badge to cycle through banners instantly
+  const shuffleBtn = document.getElementById('banner-shuffle-btn');
+  if (shuffleBtn) {
+    shuffleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentIdx = parseInt(sessionStorage.getItem(LAST_BANNER_KEY), 10) || 0;
+      const nextIdx = getRandomBannerIndex(currentIdx);
+      applyBanner(nextIdx);
+    });
   }
-
-  sessionStorage.setItem(LAST_BANNER_KEY, nextIdx.toString());
-
-  // Apply new banner
-  bannerImg.src = BANNER_POOL[nextIdx];
-  bannerImg.alt = `Profile banner aesthetic #${nextIdx + 1}`;
 }
 
 // -----------------------------------------------------------------------------
