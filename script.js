@@ -362,10 +362,44 @@ function printConsoleWelcome() {
 // Lifecycle Initialization
 // -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+// Dynamic Footer Quote Randomizer
+// True random selection on every page load/refresh
+// -----------------------------------------------------------------------------
+
+const FOOTER_QUOTES = [
+  "“Sailing an ocean of knowledge; hunting wisdom instead of gold.”",
+  "“A pirate across the oceans of knowledge, taking nothing that isn’t freely given.”",
+];
+
+function initFooterQuote() {
+  const quoteEl = document.getElementById("footer-quote-text");
+  if (!quoteEl || FOOTER_QUOTES.length === 0) return;
+
+  // Pure random selection on every refresh (independent probability)
+  const randomIdx = Math.floor(Math.random() * FOOTER_QUOTES.length);
+  quoteEl.textContent = FOOTER_QUOTES[randomIdx];
+
+  const quoteContainer = document.getElementById("footer-quote");
+  if (quoteContainer) {
+    quoteContainer.style.cursor = "pointer";
+    quoteContainer.title = "Click to rotate thoughts";
+    quoteContainer.addEventListener("click", () => {
+      const nextIdx = Math.floor(Math.random() * FOOTER_QUOTES.length);
+      quoteEl.textContent = FOOTER_QUOTES[nextIdx];
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Lifecycle Initialization
+// -----------------------------------------------------------------------------
+
 document.addEventListener('DOMContentLoaded', () => {
   initThemeSwitcher();
   initDynamicBanner();
   initCopyEmailButton();
   initLiveProjects();
+  initFooterQuote();
   printConsoleWelcome();
 });
