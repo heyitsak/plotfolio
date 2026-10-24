@@ -1,0 +1,120 @@
+/* ==========================================================================
+   Editorial Design System & Discord-Inspired Profile Card
+   Theme: Clean Editorial (Warm Neutrals & Charcoal Dark Mode)
+   Author: Akhilesh Pratap Pandey (@heyitsak)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Editorial Light Mode (Warm Paper & Rich Charcoal) */
+  --bg-color: #faf8f5;
+  --bg-subtle: #f4f0eb;
+  --card-bg: #ffffff;
+  --card-hover: #fdfdfc;
+  --border-color: #e7e3dc;
+  --border-hover: #d3cec4;
+
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #8c857b;
+
+  --accent-color: #9a3412;        /* Warm terracotta accent */
+  --accent-soft: #ffedd5;         /* Subtle tint */
+  --accent-hover: #7c2d12;
+
+  --status-online: #22c55e;        /* Discord-style vibrant online green */
+  --status-bg: #dcfce7;
+
+  /* Typography */
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
+
+  /* Layout Tokens */
+  --max-width: 800px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+  --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-card: 0 4px 20px -2px rgba(28, 25, 23, 0.05);
+  --shadow-hover: 0 12px 30px -4px rgba(28, 25, 23, 0.09);
+}
+
+/* Dark Mode (Deep Slate & Obsidian) */
+[data-theme="dark"] {
+  --bg-color: #121214;
+  --bg-subtle: #19191d;
+  --card-bg: #1c1c21;
+  --card-hover: #222228;
+  --border-color: #2e2e36;
+  --border-hover: #3f3f4a;
+
+  --text-primary: #f4f4f6;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  --accent-color: #fb923c;
+  --accent-soft: #38241b;
+  --accent-hover: #fdba74;
+
+  --status-online: #22c55e;
+  --status-bg: #052e16;
+  --shadow-card: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 12px 36px -4px rgba(0, 0, 0, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   Modern Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.65;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  min-height: 100vh;
+}
+
+::selection {
+  background-color: var(--accent-soft);
+  color: var(--accent-color);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.site-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
