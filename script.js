@@ -94,16 +94,65 @@ function applyTheme(theme) {
   localStorage.setItem(THEME_STORAGE_KEY, theme);
 }
 
+function toggleTheme(event) {
+  const toggleBtn = document.getElementById('theme-toggle');
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+  // Playful button spring spin
+  if (toggleBtn) {
+    toggleBtn.classList.remove('is-spinning');
+    void toggleBtn.offsetWidth;
+    toggleBtn.classList.add('is-spinning');
+  }
+
+  // Fallback if View Transitions API is unsupported
+  if (!document.startViewTransition) {
+    applyTheme(nextTheme);
+    return;
+  }
+
+  // Calculate coordinates for expanding circular ripple mask
+  const rect = toggleBtn 
+    ? toggleBtn.getBoundingClientRect() 
+    : { left: window.innerWidth / 2, top: 0, width: 0, height: 0 };
+  const x = event && event.clientX ? event.clientX : rect.left + rect.width / 2;
+  const y = event && event.clientY ? event.clientY : rect.top + rect.height / 2;
+
+  const endRadius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y)
+  );
+
+  const transition = document.startViewTransition(() => {
+    applyTheme(nextTheme);
+  });
+
+  transition.ready.then(() => {
+    document.documentElement.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 480,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        pseudoElement: '::view-transition-new(root)',
+      }
+    );
+  });
+}
+
 function initThemeSwitcher() {
   const toggleBtn = document.getElementById('theme-toggle');
   if (!toggleBtn) return;
 
   applyTheme(getInitialTheme());
 
-  toggleBtn.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    applyTheme(nextTheme);
+  toggleBtn.addEventListener('click', (event) => {
+    toggleTheme(event);
   });
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
