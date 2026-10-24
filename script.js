@@ -18,6 +18,19 @@ const BANNER_POOL = [
   'assets/banners/banner-5.jpg',
   'assets/banners/banner-6.jpg',
   'assets/banners/banner-7.jpg',
+  'assets/banners/banner-8.jpg',
+  'assets/banners/banner-9.jpg',
+  'assets/banners/banner-10.jpg',
+  'assets/banners/banner-11.jpg',
+  'assets/banners/banner-12.jpg',
+  'assets/banners/banner-13.jpg',
+  'assets/banners/banner-14.jpg',
+  'assets/banners/banner-15.jpg',
+  'assets/banners/banner-16.jpg',
+  'assets/banners/banner-17.jpg',
+  'assets/banners/banner-18.jpg',
+  'assets/banners/banner-19.jpg',
+  'assets/banners/banner-20.jpg',
 ];
 
 const LAST_BANNER_KEY = 'portfolio-last-banner-idx';
