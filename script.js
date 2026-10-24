@@ -380,15 +380,6 @@ function initFooterQuote() {
   const randomIdx = Math.floor(Math.random() * FOOTER_QUOTES.length);
   quoteEl.textContent = FOOTER_QUOTES[randomIdx];
 
-  const quoteContainer = document.getElementById("footer-quote");
-  if (quoteContainer) {
-    quoteContainer.style.cursor = "pointer";
-    quoteContainer.title = "Click to rotate thoughts";
-    quoteContainer.addEventListener("click", () => {
-      const nextIdx = Math.floor(Math.random() * FOOTER_QUOTES.length);
-      quoteEl.textContent = FOOTER_QUOTES[nextIdx];
-    });
-  }
 }
 
 // -----------------------------------------------------------------------------
