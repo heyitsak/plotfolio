@@ -59,16 +59,7 @@ function initDynamicBanner() {
 
   applyBanner(initialIdx);
 
-  // Allow clicking the overlay badge to cycle through banners instantly
-  const shuffleBtn = document.getElementById('banner-shuffle-btn');
-  if (shuffleBtn) {
-    shuffleBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const currentIdx = parseInt(sessionStorage.getItem(LAST_BANNER_KEY), 10) || 0;
-      const nextIdx = getRandomBannerIndex(currentIdx);
-      applyBanner(nextIdx);
-    });
-  }
+
 }
 
 // -----------------------------------------------------------------------------

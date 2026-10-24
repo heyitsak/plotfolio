@@ -303,39 +303,6 @@ button {
   transition: opacity 0.28s ease;
 }
 
-.banner-overlay-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: rgba(18, 18, 20, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #f4f4f6;
-  font-family: var(--font-mono);
-  font-size: 0.725rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-  user-select: none;
-}
-
-.banner-overlay-badge:hover {
-  background-color: rgba(18, 18, 20, 0.92);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-1px);
-}
-
-.banner-overlay-badge::before {
-  content: '✦';
-  color: var(--accent-color);
-  font-size: 0.75rem;
-}
-
 /* Profile Card Content */
 .discord-card-content {
   padding: 0 2rem 2.25rem 2rem;
