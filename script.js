@@ -7,138 +7,90 @@
 'use strict';
 
 // -----------------------------------------------------------------------------
-// Dynamic Banner Pool (Rotates on Page Refresh / Revisit & Click)
+// Dynamic Curated Banner Pool & Bespoke Color Themes
+// Hand-crafted color palettes paired with each banner artwork for 100% reliable,
+// zero-latency dynamic theming across both Light and Dark modes.
 // -----------------------------------------------------------------------------
 
-const BANNER_POOL = [
-  'assets/banners/banner-1.jpg',
-  'assets/banners/banner-2.jpg',
-  'assets/banners/banner-3.jpg',
-  'assets/banners/banner-4.jpg',
-  'assets/banners/banner-5.jpg',
-  'assets/banners/banner-6.jpg',
-  'assets/banners/banner-7.jpg',
-  'assets/banners/banner-8.jpg',
-  'assets/banners/banner-9.jpg',
-  'assets/banners/banner-10.jpg',
-  'assets/banners/banner-11.jpg',
-  'assets/banners/banner-12.jpg',
-  'assets/banners/banner-13.jpg',
-  'assets/banners/banner-14.jpg',
-  'assets/banners/banner-15.jpg',
-  'assets/banners/banner-16.jpg',
-  'assets/banners/banner-17.jpg',
-  'assets/banners/banner-18.jpg',
-  'assets/banners/banner-19.jpg',
-  'assets/banners/banner-20.jpg',
+const BANNER_THEMES = [
+  { src: "assets/banners/banner-1.jpg",  name: "Oceanic Teal",     hue: 192, sat: "82%" },
+  { src: "assets/banners/banner-2.jpg",  name: "Sakura Magenta",    hue: 346, sat: "88%" },
+  { src: "assets/banners/banner-3.jpg",  name: "Periwinkle Blue",   hue: 226, sat: "80%" },
+  { src: "assets/banners/banner-4.jpg",  name: "Amethyst Violet",   hue: 282, sat: "82%" },
+  { src: "assets/banners/banner-5.jpg",  name: "Blush Rose",        hue: 336, sat: "84%" },
+  { src: "assets/banners/banner-6.jpg",  name: "Cyber Violet",      hue: 268, sat: "88%" },
+  { src: "assets/banners/banner-7.jpg",  name: "Warm Coral",        hue: 6,   sat: "84%" },
+  { src: "assets/banners/banner-8.jpg",  name: "Bubblegum Pink",    hue: 330, sat: "94%" },
+  { src: "assets/banners/banner-9.jpg",  name: "Tokyo Crimson",     hue: 354, sat: "88%" },
+  { src: "assets/banners/banner-10.jpg", name: "Cyberpunk Amber",   hue: 38,  sat: "92%" },
+  { src: "assets/banners/banner-11.jpg", name: "Sunlit Gold",       hue: 48,  sat: "88%" },
+  { src: "assets/banners/banner-12.jpg", name: "Neon Ice Cyan",     hue: 196, sat: "90%" },
+  { src: "assets/banners/banner-13.jpg", name: "Mint Emerald",      hue: 158, sat: "82%" },
+  { src: "assets/banners/banner-14.jpg", name: "Electric Lilac",    hue: 264, sat: "86%" },
+  { src: "assets/banners/banner-15.jpg", name: "Canary Gold",       hue: 46,  sat: "94%" },
+  { src: "assets/banners/banner-16.jpg", name: "Royal Lavender",    hue: 260, sat: "80%" },
+  { src: "assets/banners/banner-17.jpg", name: "Warm Terracotta",   hue: 24,  sat: "84%" },
+  { src: "assets/banners/banner-18.jpg", name: "Dreamy Rose",       hue: 340, sat: "86%" },
+  { src: "assets/banners/banner-19.jpg", name: "Sunset Peach",      hue: 14,  sat: "84%" },
+  { src: "assets/banners/banner-20.jpg", name: "Deep Indigo",       hue: 242, sat: "86%" },
 ];
 
-const LAST_BANNER_KEY = 'portfolio-last-banner-idx';
+const LAST_BANNER_KEY = "portfolio-last-banner-idx";
 
 function getRandomBannerIndex(currentIdx) {
-  if (BANNER_POOL.length <= 1) return 0;
+  if (BANNER_THEMES.length <= 1) return 0;
   let nextIdx;
   do {
-    nextIdx = Math.floor(Math.random() * BANNER_POOL.length);
+    nextIdx = Math.floor(Math.random() * BANNER_THEMES.length);
   } while (nextIdx === currentIdx);
   return nextIdx;
 }
 
-// -----------------------------------------------------------------------------
-// Dynamic Banner-Adaptive Theme Engine
-// Analyzes the active banner artwork and dynamically shifts the site-wide
-// accent palette across both Light and Dark editorial modes.
-// -----------------------------------------------------------------------------
-
-function rgbToHsl(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0, l = (max + min) / 2;
-
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
-}
-
-function extractAndApplyBannerTheme(imgElement) {
-  try {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    canvas.width = 48;
-    canvas.height = 24;
-    ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-    const candidates = [];
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i], g = data[i + 1], b = data[i + 2];
-      const [h, s, l] = rgbToHsl(r, g, b);
-      // Sample vibrant, non-washed out pixels
-      if (s > 20 && l > 16 && l < 86) {
-        const score = s * 1.6 + (50 - Math.abs(50 - l));
-        candidates.push({ h, s, l, score });
-      }
-    }
-
-    const root = document.documentElement;
-
-    if (candidates.length > 0) {
-      candidates.sort((a, b) => b.score - a.score);
-      const top = candidates[0];
-      // Clamp saturation between 72% and 88% for crisp editorial contrast
-      const tunedSat = Math.max(72, Math.min(88, top.s));
-      root.style.setProperty('--accent-h', String(top.h));
-      root.style.setProperty('--accent-s', tunedSat + '%');
-    } else {
-      // Clean signature terracotta fallback for monochrome / B&W artwork
-      root.style.setProperty('--accent-h', '24');
-      root.style.setProperty('--accent-s', '82%');
-    }
-  } catch (err) {
-    // Graceful fallback to default signature terracotta
-    document.documentElement.style.setProperty('--accent-h', '24');
-    document.documentElement.style.setProperty('--accent-s', '82%');
-  }
-}
-
 function applyBanner(index) {
-  const bannerImg = document.getElementById('discord-banner');
-  if (!bannerImg || !BANNER_POOL[index]) return;
+  const bannerImg = document.getElementById("discord-banner");
+  const theme = BANNER_THEMES[index];
+  if (!bannerImg || !theme) return;
 
   sessionStorage.setItem(LAST_BANNER_KEY, index.toString());
 
-  // Subtle smooth crossfade
-  bannerImg.style.opacity = '0.4';
+  // Instantly synchronize site-wide theme accents (0ms latency, zero canvas CORS limitations)
+  const root = document.documentElement;
+  root.style.setProperty("--accent-h", String(theme.hue));
+  root.style.setProperty("--accent-s", theme.sat);
+
+  // Smooth crossfade image load
+  bannerImg.style.opacity = "0.35";
   const preloader = new Image();
-  preloader.src = BANNER_POOL[index];
+  preloader.src = theme.src;
   preloader.onload = () => {
-    bannerImg.src = BANNER_POOL[index];
-    bannerImg.alt = `Profile aesthetic banner #${index + 1}`;
-    bannerImg.style.opacity = '1';
-    extractAndApplyBannerTheme(preloader);
+    bannerImg.src = theme.src;
+    bannerImg.alt = `Profile aesthetic banner: ${theme.name}`;
+    bannerImg.style.opacity = "1";
   };
 }
 
 function initDynamicBanner() {
-  const bannerImg = document.getElementById('discord-banner');
-  if (!bannerImg || BANNER_POOL.length === 0) return;
+  const bannerImg = document.getElementById("discord-banner");
+  if (!bannerImg || BANNER_THEMES.length === 0) return;
 
   const lastIdx = parseInt(sessionStorage.getItem(LAST_BANNER_KEY), 10);
   const initialIdx = isNaN(lastIdx) 
-    ? Math.floor(Math.random() * BANNER_POOL.length) 
+    ? Math.floor(Math.random() * BANNER_THEMES.length) 
     : getRandomBannerIndex(lastIdx);
 
   applyBanner(initialIdx);
 
-
+  // Click banner to explore another aesthetic
+  const bannerContainer = document.querySelector(".discord-banner-container");
+  if (bannerContainer) {
+    bannerContainer.style.cursor = "pointer";
+    bannerContainer.title = "Click to explore another aesthetic";
+    bannerContainer.addEventListener("click", () => {
+      const currentIdx = parseInt(sessionStorage.getItem(LAST_BANNER_KEY), 10) || 0;
+      const nextIdx = getRandomBannerIndex(currentIdx);
+      applyBanner(nextIdx);
+    });
+  }
 }
 
 // -----------------------------------------------------------------------------
