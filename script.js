@@ -144,6 +144,125 @@ function initCopyEmailButton() {
 }
 
 // -----------------------------------------------------------------------------
+// Live GitHub Projects Synchronizer (Fetches Top 3 Recent Original Repos)
+// -----------------------------------------------------------------------------
+
+const GITHUB_USERNAME = 'heyitsak';
+const GITHUB_CACHE_KEY = 'plotfolio-github-repos-cache';
+const GITHUB_CACHE_TIME_KEY = 'plotfolio-github-repos-time';
+const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache
+
+async function fetchLiveProjects() {
+  const cachedData = localStorage.getItem(GITHUB_CACHE_KEY);
+  const cachedTime = localStorage.getItem(GITHUB_CACHE_TIME_KEY);
+  const now = Date.now();
+
+  if (cachedData && cachedTime && (now - parseInt(cachedTime, 10)) < CACHE_DURATION_MS) {
+    try {
+      return JSON.parse(cachedData);
+    } catch (e) {
+      // Fall through to live network fetch
+    }
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=12`,
+      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+    );
+    if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+    const repos = await response.json();
+
+    // Filter: only original non-fork repos, excluding profile and website repos
+    const filtered = repos.filter(repo =>
+      !repo.fork &&
+      repo.name.toLowerCase() !== GITHUB_USERNAME.toLowerCase() &&
+      repo.name.toLowerCase() !== 'plotfolio'
+    );
+
+    // Keep top 3 most recently updated
+    const topThree = filtered.slice(0, 3);
+
+    localStorage.setItem(GITHUB_CACHE_KEY, JSON.stringify(topThree));
+    localStorage.setItem(GITHUB_CACHE_TIME_KEY, now.toString());
+    return topThree;
+  } catch (err) {
+    console.warn('Live GitHub fetch fallback: keeping pre-rendered projects.', err);
+    return null;
+  }
+}
+
+function formatRepoTitle(name) {
+  return name
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function formatRepoDate(isoString) {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+function renderProjects(repos) {
+  const container = document.getElementById('projects-container');
+  if (!container || !repos || !repos.length) return;
+
+  container.innerHTML = repos.map(repo => {
+    const formattedTitle = formatRepoTitle(repo.name);
+    const dateStr = formatRepoDate(repo.updated_at);
+    const lang = repo.language || 'Software';
+    const stars = repo.stargazers_count > 0 
+      ? `<span class="star-count" title="${repo.stargazers_count} star on GitHub">★ ${repo.stargazers_count}</span>` 
+      : '';
+    const demoLink = repo.homepage 
+      ? `<a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link-btn"><span>Live Demo</span><span aria-hidden="true">↗</span></a>` 
+      : '';
+
+    return `
+      <article class="project-card">
+        <div>
+          <div class="project-header">
+            <h3 class="project-title">
+              <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+                ${formattedTitle}
+                <span class="project-arrow" aria-hidden="true">↗</span>
+              </a>
+            </h3>
+            <div class="project-meta-right">
+              ${stars}
+              <span class="project-meta">${dateStr}</span>
+            </div>
+          </div>
+          <p class="project-description">
+            ${repo.description || 'Modern software engineering repository on GitHub.'}
+          </p>
+          <ul class="project-tags" aria-label="Technologies used">
+            <li class="tech-tag">${lang}</li>
+            ${(repo.topics || []).slice(0, 3).map(t => `<li class="tech-tag">${t}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="project-links">
+          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link-btn">
+            <span>View Source</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          ${demoLink}
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+async function initLiveProjects() {
+  const repos = await fetchLiveProjects();
+  if (repos && repos.length) {
+    renderProjects(repos);
+  }
+}
+
+// -----------------------------------------------------------------------------
 // Developer Console Easter Egg
 // -----------------------------------------------------------------------------
 
@@ -167,5 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeSwitcher();
   initDynamicBanner();
   initCopyEmailButton();
+  initLiveProjects();
   printConsoleWelcome();
 });

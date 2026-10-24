@@ -591,6 +591,54 @@ button {
   color: var(--text-muted);
 }
 
+.project-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.star-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.live-sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  color: var(--status-online);
+  background-color: var(--status-bg);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  margin-left: 0.75rem;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.live-sync-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--status-online);
+  position: relative;
+}
+
+.projects-footer-cta {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .project-description {
   color: var(--text-secondary);
   font-size: 0.95rem;
