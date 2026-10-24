@@ -363,6 +363,28 @@ function printConsoleWelcome() {
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
+// Discord Custom Status Randomizer
+// -----------------------------------------------------------------------------
+
+const CUSTOM_STATUSES = [
+  { emoji: "🏴‍☠️", text: "sailing uncharted waters" },
+  { emoji: "🧭", text: "searching for the next treasure" },
+  { emoji: "🌊", text: "sailing an endless ocean" },
+  { emoji: "💤", text: "offline most of the time" },
+];
+
+function initCustomStatus() {
+  const emojiEl = document.getElementById("custom-status-emoji");
+  const textEl = document.getElementById("custom-status-text");
+  if (!emojiEl || !textEl || CUSTOM_STATUSES.length === 0) return;
+
+  const randomIdx = Math.floor(Math.random() * CUSTOM_STATUSES.length);
+  const status = CUSTOM_STATUSES[randomIdx];
+  emojiEl.textContent = status.emoji;
+  textEl.textContent = status.text;
+}
+
+// -----------------------------------------------------------------------------
 // Dynamic Footer Quote Randomizer
 // True random selection on every page load/refresh
 // -----------------------------------------------------------------------------
@@ -391,6 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDynamicBanner();
   initCopyEmailButton();
   initLiveProjects();
+  initCustomStatus();
   initFooterQuote();
   printConsoleWelcome();
 });
