@@ -284,18 +284,20 @@ button {
 .discord-banner-container {
   position: relative;
   width: 100%;
+  aspect-ratio: 734 / 206;
   background-color: var(--bg-subtle);
   overflow: hidden;
-  line-height: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   display: block;
 }
 
 .discord-banner-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
-  /* Preserve original pixel aspect ratio without forced crops or distortion */
+  /* Exactly matches 734x206 golden proportion without clipping or distortion */
   object-fit: cover;
+  object-position: center;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   transition: opacity 0.28s ease;

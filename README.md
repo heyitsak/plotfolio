@@ -36,14 +36,30 @@ Built with an uncompromising focus on **human software craftsmanship**:
 ```text
 plotfolio/
 ├── assets/
-│   ├── banners/       # Pool of rotating aesthetic banners (banner-1.jpg .. banner-9.jpg)
+│   ├── banners/       # Golden-ratio banners (734x206, banner-1.jpg .. banner-N.jpg)
 │   └── pfp/           # Static profile picture (avatar.jpg)
 ├── .gitignore         # Clean repository ignore rules
 ├── index.html         # Semantic, accessible HTML5 structure & SEO meta tags
 ├── styles.css         # Design tokens, Discord profile card & dark/light themes
 ├── script.js          # Lightweight Vanilla JS (banner rotation, theme switch, toast)
+├── process_banners.py # Tool to auto-scale new banners to the 734x206 golden ratio
 └── README.md          # Project documentation & GitHub Pages deployment guide
 ```
+
+---
+
+## 🎨 Adding & Curating Banners
+
+Whenever you find new banners and drop them into your `Desktop/pfp and banner/banner` folder:
+
+```bash
+# Run the built-in optimizer
+python process_banners.py
+```
+This tool:
+1. Auto-resizes and center-fits every banner to the golden **734x206** dimension using high-quality Lanczos resampling.
+2. Updates `plotfolio/assets/banners/`.
+3. Automatically updates `script.js` with the new banner pool count.
 
 ---
 
