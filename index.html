@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akhilesh Pratap Pandey (@heyitsak) — Portfolio</title>
+  <meta name="description" content="Personal portfolio and software engineering showcase of Akhilesh Pratap Pandey (@heyitsak). Handcrafted with semantic web standards.">
+  
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="site-container">
+      <nav class="nav-inner" aria-label="Main Navigation">
+        <a href="#hero" class="brand-link" aria-label="Home">
+          <span class="brand-monogram">AK</span>
+          <span class="brand-name">Akhilesh</span>
+        </a>
+
+        <div class="nav-actions">
+          <ul class="nav-menu">
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+
+          <!-- Theme Switcher Button -->
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle dark/light mode">
+            <!-- Sun Icon (for dark mode) -->
+            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon Icon (for light mode) -->
+            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="site-container">
+    
+    <!-- Hero / Discord-Style Profile Card -->
+    <section id="hero" class="profile-card-wrapper" aria-label="Profile card">
+      <div class="discord-profile-card">
+        
+        <!-- Banner Container (Refreshes on each load) -->
+        <div class="discord-banner-container">
+          <img 
+            id="discord-banner" 
+            class="discord-banner-img" 
+            src="assets/banners/banner-1.jpg" 
+            alt="Dynamic profile banner"
+            loading="eager"
+          >
+          <div class="banner-overlay-badge">
+            <span>Refresh for new banner</span>
+          </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="discord-card-content">
+          
+          <!-- Avatar + Status Dot + Quick Follow Action -->
+          <div class="discord-avatar-row">
+            <div class="discord-avatar-container">
+              <img 
+                class="discord-avatar-img" 
+                src="assets/pfp/avatar.jpg" 
+                alt="Akhilesh Pratap Pandey"
+              >
+              <!-- Discord Online Green Status Dot -->
+              <span class="discord-status-dot" title="Online & coding" aria-label="Status: Online"></span>
+            </div>
+
+            <div class="discord-card-meta-actions">
+              <a href="https://github.com/heyitsak" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                <span>GitHub Profile</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- User Display & Handle -->
+          <div class="profile-names">
+            <h1 class="profile-display-name">
+              Akhilesh Pratap Pandey
+              <span class="profile-badge-pill">Developer</span>
+            </h1>
+            <p class="profile-username">@heyitsak</p>
+          </div>
+
+          <!-- Discord Custom Status Line -->
+          <div class="profile-custom-status">
+            <span class="custom-status-emoji">⚡</span>
+            <span>locking in &amp; building human-crafted software</span>
+          </div>
+
+          <!-- Bio / About -->
+          <div id="about" class="profile-bio">
+            <p>
+              I am a developer focused on modern web engineering, clean system architecture, and thoughtful user experiences. I believe in writing readable, authentic code that stands the test of time.
+            </p>
+            <p>
+              Passionate about full-stack development, open source, and building tools that make people's lives easier.
+            </p>
+          </div>
+
+          <!-- Card Quick Links -->
+          <div class="profile-card-actions">
+            <a href="#projects" class="btn-primary">
+              <span>View Projects</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+            <a href="#contact" class="btn-secondary">
+              <span>Get in touch</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional sections will be added here -->
+
+  </main>
+
+</body>
+</html>
