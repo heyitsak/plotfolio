@@ -45,8 +45,9 @@ function getRandomBannerIndex(currentIdx) {
 }
 
 // -----------------------------------------------------------------------------
-// Dynamic Multi-Tone Palette Extractor & Living Theme Synchronizer
-// Samples distinct dominant & complementary hues from the banner to power living aurora
+// Dynamic Banner-Adaptive Theme Engine
+// Analyzes the active banner artwork and dynamically shifts the site-wide
+// accent palette across both Light and Dark editorial modes.
 // -----------------------------------------------------------------------------
 
 function rgbToHsl(r, g, b) {
@@ -67,29 +68,6 @@ function rgbToHsl(r, g, b) {
   return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
 }
 
-function hslToRgb(h, s, l) {
-  h /= 360; s /= 100; l /= 100;
-  let r, g, b;
-  if (s === 0) {
-    r = g = b = l;
-  } else {
-    const hue2rgb = (p, q, t) => {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-      return p;
-    };
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1/3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
-  }
-  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
-
 function extractAndApplyBannerTheme(imgElement) {
   try {
     const canvas = document.createElement('canvas');
@@ -103,93 +81,31 @@ function extractAndApplyBannerTheme(imgElement) {
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i], g = data[i + 1], b = data[i + 2];
       const [h, s, l] = rgbToHsl(r, g, b);
-      if (s > 25 && l > 18 && l < 82) {
-        candidates.push({ r, g, b, h, s, l, score: s * 1.5 + (50 - Math.abs(50 - l)) });
+      // Sample vibrant, non-washed out pixels
+      if (s > 20 && l > 16 && l < 86) {
+        const score = s * 1.6 + (50 - Math.abs(50 - l));
+        candidates.push({ h, s, l, score });
       }
-    }
-
-    candidates.sort((a, b) => b.score - a.score);
-
-    let c1 = candidates[0] ? [candidates[0].r, candidates[0].g, candidates[0].b] : [154, 52, 18];
-    let c2 = null;
-    let c3 = null;
-
-    if (candidates[0]) {
-      const baseHue = candidates[0].h;
-      for (let i = 1; i < candidates.length; i++) {
-        const diff = Math.abs(candidates[i].h - baseHue);
-        if (diff > 35 && diff < 325) {
-          c2 = [candidates[i].r, candidates[i].g, candidates[i].b];
-          break;
-        }
-      }
-      for (let i = 1; i < candidates.length; i++) {
-        const c = candidates[i];
-        if (c2 && (c.r !== c2[0] || c.g !== c2[1])) {
-          c3 = [c.r, c.g, c.b];
-          break;
-        }
-      }
-    }
-
-    if (!c2) {
-      const [h, s, l] = rgbToHsl(c1[0], c1[1], c1[2]);
-      c2 = hslToRgb((h + 45) % 360, Math.min(s + 15, 95), Math.max(l - 10, 30));
-    }
-    if (!c3) {
-      const [h, s, l] = rgbToHsl(c1[0], c1[1], c1[2]);
-      c3 = hslToRgb((h + 180) % 360, Math.min(s + 10, 90), Math.min(l + 15, 75));
     }
 
     const root = document.documentElement;
-    const str1 = `${c1[0]}, ${c1[1]}, ${c1[2]}`;
-    const str2 = `${c2[0]}, ${c2[1]}, ${c2[2]}`;
-    const str3 = `${c3[0]}, ${c3[1]}, ${c3[2]}`;
 
-    root.style.setProperty('--banner-c1-rgb', str1);
-    root.style.setProperty('--banner-c2-rgb', str2);
-    root.style.setProperty('--banner-c3-rgb', str3);
-
-    root.style.setProperty('--banner-c1', `rgb(${str1})`);
-    root.style.setProperty('--banner-c2', `rgb(${str2})`);
-    root.style.setProperty('--banner-c3', `rgb(${str3})`);
-
-    root.style.setProperty('--banner-c1-glow', `rgba(${str1}, 0.28)`);
-    root.style.setProperty('--banner-c2-glow', `rgba(${str2}, 0.22)`);
-
-    root.style.setProperty('--banner-gradient', `linear-gradient(135deg, rgb(${str1}), rgb(${str2}))`);
-    root.style.setProperty('--banner-accent', `rgb(${str1})`);
-
-    // Update Live Palette Swatches
-    const s1 = document.getElementById('swatch-1');
-    const s2 = document.getElementById('swatch-2');
-    const s3 = document.getElementById('swatch-3');
-    if (s1) {
-      s1.style.backgroundColor = `rgb(${str1})`;
-      s1.title = `Primary Hue: rgb(${str1})`;
-      s1.onclick = () => {
-        root.style.setProperty('--banner-gradient', `linear-gradient(135deg, rgb(${str1}), rgb(${str2}))`);
-        showToast('Primary banner accent activated!');
-      };
-    }
-    if (s2) {
-      s2.style.backgroundColor = `rgb(${str2})`;
-      s2.title = `Secondary Hue: rgb(${str2})`;
-      s2.onclick = () => {
-        root.style.setProperty('--banner-gradient', `linear-gradient(135deg, rgb(${str2}), rgb(${str1}))`);
-        showToast('Secondary banner accent flipped!');
-      };
-    }
-    if (s3) {
-      s3.style.backgroundColor = `rgb(${str3})`;
-      s3.title = `Complementary Hue: rgb(${str3})`;
-      s3.onclick = () => {
-        root.style.setProperty('--banner-gradient', `linear-gradient(135deg, rgb(${str3}), rgb(${str1}))`);
-        showToast('Ambient complementary tone activated!');
-      };
+    if (candidates.length > 0) {
+      candidates.sort((a, b) => b.score - a.score);
+      const top = candidates[0];
+      // Clamp saturation between 72% and 88% for crisp editorial contrast
+      const tunedSat = Math.max(72, Math.min(88, top.s));
+      root.style.setProperty('--accent-h', String(top.h));
+      root.style.setProperty('--accent-s', tunedSat + '%');
+    } else {
+      // Clean signature terracotta fallback for monochrome / B&W artwork
+      root.style.setProperty('--accent-h', '24');
+      root.style.setProperty('--accent-s', '82%');
     }
   } catch (err) {
-    // Graceful fallback
+    // Graceful fallback to default signature terracotta
+    document.documentElement.style.setProperty('--accent-h', '24');
+    document.documentElement.style.setProperty('--accent-s', '82%');
   }
 }
 
