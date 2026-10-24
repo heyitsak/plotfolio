@@ -26,6 +26,12 @@
   --status-online: #22c55e;        /* Discord-style vibrant online green */
   --status-bg: #dcfce7;
 
+  /* Dynamic Banner-Reactive Ambient Aura (Harmonizes with active banner artwork) */
+  --banner-accent-rgb: 154, 52, 18;
+  --banner-accent: rgb(var(--banner-accent-rgb));
+  --banner-glow: rgba(var(--banner-accent-rgb), 0.18);
+  --banner-glow-subtle: rgba(var(--banner-accent-rgb), 0.06);
+
   /* Typography */
   --font-serif: 'Newsreader', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -58,6 +64,9 @@
   --accent-color: #fb923c;
   --accent-soft: #38241b;
   --accent-hover: #fdba74;
+
+  --banner-glow: rgba(var(--banner-accent-rgb), 0.32);
+  --banner-glow-subtle: rgba(var(--banner-accent-rgb), 0.1);
 
   --status-online: #22c55e;
   --status-bg: #052e16;
@@ -170,6 +179,7 @@ button {
 
 .brand-link:hover .brand-monogram {
   transform: rotate(-6deg) scale(1.05);
+  box-shadow: 0 4px 16px var(--banner-glow);
 }
 
 .nav-actions {
@@ -204,7 +214,7 @@ button {
   left: 0;
   width: 0%;
   height: 1.5px;
-  background-color: var(--accent-color);
+  background-color: var(--banner-accent);
   transition: width 0.2s ease;
 }
 
@@ -307,25 +317,45 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   Discord-Inspired Profile Card
+   Discord-Inspired Profile Card with Reactive Atmospheric Aura
    -------------------------------------------------------------------------- */
 .profile-card-wrapper {
+  position: relative;
   padding-top: 2.5rem;
   margin-bottom: 3.5rem;
 }
 
+/* Ambient Diffused Atmosphere (Glows subtly with the active banner's dominant colors) */
+.profile-card-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem;
+  left: 3%;
+  right: 3%;
+  height: 290px;
+  background: radial-gradient(ellipse at 50% 35%, var(--banner-glow) 0%, var(--banner-glow-subtle) 50%, transparent 75%);
+  filter: blur(52px);
+  border-radius: var(--radius-lg);
+  z-index: 0;
+  opacity: 0.95;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
 .discord-profile-card {
+  position: relative;
+  z-index: 1;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-card);
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .discord-profile-card:hover {
-  box-shadow: var(--shadow-hover);
-  border-color: var(--border-hover);
+  box-shadow: 0 16px 42px -8px var(--banner-glow);
+  border-color: rgba(var(--banner-accent-rgb), 0.35);
 }
 
 /* Banner Container */
@@ -459,11 +489,12 @@ button {
   gap: 0.5rem;
   padding: 0.4rem 0.85rem;
   background-color: var(--bg-subtle);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(var(--banner-accent-rgb), 0.22);
   border-radius: var(--radius-pill);
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-bottom: 1.25rem;
+  transition: border-color 0.4s ease;
 }
 
 .custom-status-emoji {

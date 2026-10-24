@@ -44,6 +44,52 @@ function getRandomBannerIndex(currentIdx) {
   return nextIdx;
 }
 
+// -----------------------------------------------------------------------------
+// Dynamic Banner-Adaptive Palette Extractor
+// Samples dominant chromatic tones from the active banner to harmonize ambient aura
+// -----------------------------------------------------------------------------
+
+function extractAndApplyBannerTheme(imgElement) {
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    canvas.width = 32;
+    canvas.height = 16;
+    ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+    let maxScore = -1;
+    let bestR = 154, bestG = 52, bestB = 18;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      const delta = max - min;
+      const sat = max === 0 ? 0 : delta / max;
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+      // Seek rich, vibrant color tones (filtering out dark greys, muddy tones, and washed whites)
+      if (brightness > 45 && brightness < 220 && sat > 0.22) {
+        const score = sat * 1.7 + (1 - Math.abs(brightness - 130) / 130);
+        if (score > maxScore) {
+          maxScore = score;
+          bestR = r;
+          bestG = g;
+          bestB = b;
+        }
+      }
+    }
+
+    document.documentElement.style.setProperty('--banner-accent-rgb', `${bestR}, ${bestG}, ${bestB}`);
+  } catch (err) {
+    // Keep default token if canvas access is unavailable
+  }
+}
+
 function applyBanner(index) {
   const bannerImg = document.getElementById('discord-banner');
   if (!bannerImg || !BANNER_POOL[index]) return;
@@ -58,6 +104,7 @@ function applyBanner(index) {
     bannerImg.src = BANNER_POOL[index];
     bannerImg.alt = `Profile aesthetic banner #${index + 1}`;
     bannerImg.style.opacity = '1';
+    extractAndApplyBannerTheme(preloader);
   };
 }
 
