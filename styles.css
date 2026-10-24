@@ -990,8 +990,29 @@ button {
   gap: 1.5rem;
 }
 
-.footer-credits p {
-  line-height: 1.5;
+.footer-quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.footer-quote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.footer-quote-author {
+  display: block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  margin-top: 0.45rem;
+  letter-spacing: 0.02em;
 }
 
 .footer-top-link {
