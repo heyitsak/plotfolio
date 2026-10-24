@@ -86,10 +86,54 @@ function initThemeSwitcher() {
 }
 
 // -----------------------------------------------------------------------------
+// Interactive Email Copy & Toast Notification
+// -----------------------------------------------------------------------------
+
+function showToast(message) {
+  let toast = document.querySelector('.toast-notification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    document.body.appendChild(toast);
+  }
+
+  toast.innerHTML = `<span>✓</span><span>${message}</span>`;
+  toast.classList.add('show');
+
+  if (toast._timer) {
+    clearTimeout(toast._timer);
+  }
+
+  toast._timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2600);
+}
+
+function initCopyEmailButton() {
+  const copyButtons = document.querySelectorAll('[data-copy-email]');
+  if (!copyButtons.length) return;
+
+  copyButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const email = btn.getAttribute('data-copy-email') || 'heyitsak@users.noreply.github.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        showToast('Email address copied to clipboard!');
+      } catch (err) {
+        window.location.href = `mailto:${email}`;
+      }
+    });
+  });
+}
+
+// -----------------------------------------------------------------------------
 // Lifecycle Initialization
 // -----------------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
   initThemeSwitcher();
   initDynamicBanner();
+  initCopyEmailButton();
 });
