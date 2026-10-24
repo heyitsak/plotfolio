@@ -23,6 +23,13 @@
 </head>
 <body>
 
+  <!-- Ambient Living Aurora Mesh (Dynamic background light synchronized with banner) -->
+  <div class="aurora-mesh" aria-hidden="true">
+    <div class="aurora-orb aurora-orb-1"></div>
+    <div class="aurora-orb aurora-orb-2"></div>
+    <div class="aurora-orb aurora-orb-3"></div>
+  </div>
+
   <!-- Site Navigation -->
   <header class="site-header">
     <div class="site-container">
@@ -97,6 +104,14 @@
             </div>
 
             <div class="discord-card-meta-actions">
+              <!-- Live Banner Palette Swatches -->
+              <div class="live-palette-strip" id="live-palette-strip" title="Extracted live from active banner artwork" aria-label="Banner palette">
+                <span class="palette-label">Palette</span>
+                <span class="palette-swatch swatch-1" id="swatch-1"></span>
+                <span class="palette-swatch swatch-2" id="swatch-2"></span>
+                <span class="palette-swatch swatch-3" id="swatch-3"></span>
+              </div>
+
               <a href="https://github.com/heyitsak" target="_blank" rel="noopener noreferrer" class="btn-secondary">
                 <span>GitHub Profile</span>
                 <span aria-hidden="true">↗</span>
