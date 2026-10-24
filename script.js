@@ -129,6 +129,22 @@ function initCopyEmailButton() {
 }
 
 // -----------------------------------------------------------------------------
+// Developer Console Easter Egg
+// -----------------------------------------------------------------------------
+
+function printConsoleWelcome() {
+  const banner = `
+  ┌──────────────────────────────────────────────┐
+  │  ✦ Crafted with care by Akhilesh (@heyitsak) │
+  │  Discord-style dynamic banner architecture   │
+  │  100% semantic HTML, vanilla CSS & modern JS │
+  │  Thanks for inspecting! Have a great day. ☕ │
+  └──────────────────────────────────────────────┘
+  `;
+  console.log(`%c${banner}`, 'color: #9a3412; font-family: monospace; font-size: 12px; font-weight: bold;');
+}
+
+// -----------------------------------------------------------------------------
 // Lifecycle Initialization
 // -----------------------------------------------------------------------------
 
@@ -136,4 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeSwitcher();
   initDynamicBanner();
   initCopyEmailButton();
+  printConsoleWelcome();
 });
