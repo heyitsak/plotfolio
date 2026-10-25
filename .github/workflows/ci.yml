@@ -1,0 +1,34 @@
+name: CI Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-validate:
+    name: Code & Structure Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Core Files & Python Syntax
+        run: |
+          echo "Verifying essential frontend files..."
+          test -f index.html || exit 1
+          test -f styles.css || exit 1
+          test -f script.js || exit 1
+          test -f LICENSE || exit 1
+          echo "Verifying Python scripts..."
+          python -m py_compile process_banners.py
+          echo "All checks passed successfully."

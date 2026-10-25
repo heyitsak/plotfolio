@@ -2,9 +2,12 @@
 
 > A modern, handcrafted personal developer portfolio featuring a Discord-inspired profile header with dynamic refreshing banners and clean editorial typography.
 
+[![Live Showcase](https://img.shields.io/badge/Live_Showcase-heyitsak.github.io%2Fplotfolio-ea580c?style=flat-square&logo=safari&logoColor=white)](https://heyitsak.github.io/plotfolio/)
+[![CI Verification](https://github.com/heyitsak/plotfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/heyitsak/plotfolio/actions/workflows/ci.yml)
+[![Discussions](https://img.shields.io/badge/Discussions-Join_Community-blue?style=flat-square&logo=github)](https://github.com/heyitsak/plotfolio/discussions)
 [![Code Style](https://img.shields.io/badge/Code-100%25%20Handcrafted-blueviolet?style=flat-square)](#philosophy--architecture)
 [![Design](https://img.shields.io/badge/Design-Editorial%20%2B%20Discord-orange?style=flat-square)](#features)
-[![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 ---
 
