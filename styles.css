@@ -851,6 +851,13 @@ button {
   color: var(--accent-color);
 }
 
+.skill-category-desc {
+  font-size: 0.885rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.1rem;
+}
+
 .skill-items {
   display: flex;
   flex-wrap: wrap;
