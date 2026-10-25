@@ -228,9 +228,9 @@ function initCopyEmailButton() {
 // -----------------------------------------------------------------------------
 
 const GITHUB_USERNAME = 'heyitsak';
-const GITHUB_CACHE_KEY = 'plotfolio-github-repos-cache';
-const GITHUB_CACHE_TIME_KEY = 'plotfolio-github-repos-time';
-const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache
+const GITHUB_CACHE_KEY = 'plotfolio-github-repos-v3';
+const GITHUB_CACHE_TIME_KEY = 'plotfolio-github-repos-time-v3';
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes cache
 
 async function fetchLiveProjects() {
   const cachedData = localStorage.getItem(GITHUB_CACHE_KEY);
@@ -253,11 +253,10 @@ async function fetchLiveProjects() {
     if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
     const repos = await response.json();
 
-    // Filter: only original non-fork repos, excluding profile and website repos
+    // Filter: only original non-fork repos (including this portfolio itself!)
     const filtered = repos.filter(repo =>
       !repo.fork &&
-      repo.name.toLowerCase() !== GITHUB_USERNAME.toLowerCase() &&
-      repo.name.toLowerCase() !== 'plotfolio'
+      repo.name.toLowerCase() !== GITHUB_USERNAME.toLowerCase()
     );
 
     // Keep top 3 most recently updated
@@ -273,6 +272,19 @@ async function fetchLiveProjects() {
 }
 
 function formatRepoTitle(name) {
+  const customMap = {
+    'plotfolio': 'Plotfolio',
+    'polycoder': 'PolyCoder',
+    'gpchopan-website': 'GPChopan Website',
+    'news-map': 'News Map',
+    'codeforge': 'CodeForge',
+    'onex-portal': 'OneX Portal',
+    'onex-spacetech': 'OneX SpaceTech',
+    'gpchopan-website-redesign': 'GPChopan Redesign',
+  };
+  if (customMap[name.toLowerCase()]) {
+    return customMap[name.toLowerCase()];
+  }
   return name
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
