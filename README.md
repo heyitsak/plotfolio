@@ -118,3 +118,9 @@ git push -u origin main
 ## 📄 License
 
 MIT © [Akhilesh Pratap Pandey](https://github.com/heyitsak)
+
+---
+
+## 🤝 Community & Contributions
+
+Contributions, issues, and feature requests are welcome. Feel free to check the [issues page](https://github.com/heyitsak/plotfolio/issues) or join the [Discussions](https://github.com/heyitsak/plotfolio/discussions).
