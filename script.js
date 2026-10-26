@@ -371,10 +371,6 @@ function printConsoleWelcome() {
 }
 
 // -----------------------------------------------------------------------------
-// Lifecycle Initialization
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
 // Discord Custom Status Randomizer
 // -----------------------------------------------------------------------------
 
@@ -417,6 +413,375 @@ function initFooterQuote() {
 }
 
 // -----------------------------------------------------------------------------
+// Atmospheric Corner Butterfly Sanctuary (The Last of Us Inspired Signature)
+// High-performance canvas rendering with 3D wing-flap perspective,
+// natural flap-and-glide flight cycles, glowing spore trails, and gentle cursor evasion.
+// -----------------------------------------------------------------------------
+
+function initButterflySanctuary() {
+  const canvas = document.getElementById('butterfly-sanctuary');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let animId = null;
+  let isTabActive = true;
+
+  // Track cursor for gentle proximity evasion
+  const mouse = { x: -9999, y: -9999, active: false };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  // Responsive canvas sizing with retina crispness
+  function resizeCanvas() {
+    dpr = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+  resizeCanvas();
+
+  // Spore (luminous dust mote) particle pool
+  const spores = [];
+  const MAX_SPORES = 48;
+
+  function spawnSpore(x, y, isDarkMode) {
+    if (spores.length >= MAX_SPORES) return;
+    spores.push({
+      x: x + (Math.random() - 0.5) * 6,
+      y: y + (Math.random() - 0.5) * 6,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: 0.15 + Math.random() * 0.35,
+      radius: 0.6 + Math.random() * 1.2,
+      alpha: 0.7 + Math.random() * 0.3,
+      decay: 0.004 + Math.random() * 0.006,
+      isDark: isDarkMode
+    });
+  }
+
+  // Butterfly entity with organic flight dynamics
+  class Butterfly {
+    constructor(id, scaleMultiplier, anchorOffsetX, anchorOffsetY) {
+      this.id = id;
+      this.scale = scaleMultiplier;
+      this.anchorOffsetX = anchorOffsetX;
+      this.anchorOffsetY = anchorOffsetY;
+
+      // Position & Velocity
+      this.x = width * 0.85 + anchorOffsetX;
+      this.y = height * 0.15 + anchorOffsetY;
+      this.vx = 0;
+      this.vy = 0;
+      this.heading = -Math.PI * 0.25;
+
+      // Wing animation states
+      this.wingPhase = Math.random() * Math.PI * 2;
+      this.wingSpeed = 0.28;
+      this.mode = 'flutter'; // 'flutter' or 'glide'
+      this.modeTimer = 30 + Math.random() * 60;
+
+      // Individual oscillation offsets
+      this.timeOffset = Math.random() * 1000;
+      this.evasionAlert = 0;
+    }
+
+    update(now, isDarkMode) {
+      // Dynamic Sanctuary Anchor in the upper-right corner
+      // Shifts slightly towards center on smaller screens for perfect framing
+      const sanctuaryX = width > 768 ? width * 0.84 + this.anchorOffsetX : width * 0.76 + this.anchorOffsetX * 0.6;
+      const sanctuaryY = width > 768 ? height * 0.16 + this.anchorOffsetY : height * 0.12 + this.anchorOffsetY * 0.6;
+
+      // Mode cycle: alternating between active fluttering and serene gliding
+      this.modeTimer--;
+      if (this.modeTimer <= 0) {
+        if (this.mode === 'flutter') {
+          this.mode = 'glide';
+          this.modeTimer = 45 + Math.random() * 75;
+        } else {
+          this.mode = 'flutter';
+          this.modeTimer = 30 + Math.random() * 50;
+        }
+      }
+
+      // Proximity cursor evasion
+      const dxMouse = this.x - mouse.x;
+      const dyMouse = this.y - mouse.y;
+      const distMouse = Math.hypot(dxMouse, dyMouse);
+      const evasionRadius = 145;
+
+      let ax = 0;
+      let ay = 0;
+
+      if (mouse.active && distMouse < evasionRadius) {
+        this.mode = 'flutter';
+        this.evasionAlert = Math.min(1, this.evasionAlert + 0.1);
+        const pushForce = ((evasionRadius - distMouse) / evasionRadius) * 0.9;
+        ax += (dxMouse / (distMouse || 1)) * pushForce;
+        ay += (dyMouse / (distMouse || 1)) * pushForce;
+
+        if (Math.random() < 0.3) {
+          spawnSpore(this.x, this.y, isDarkMode);
+        }
+      } else {
+        this.evasionAlert = Math.max(0, this.evasionAlert - 0.02);
+      }
+
+      // Sanctuary homing pull gently drawing them back to their corner home
+      const dxHome = sanctuaryX - this.x;
+      const dyHome = sanctuaryY - this.y;
+      const distHome = Math.hypot(dxHome, dyHome);
+      const homeForce = 0.0018 + (distHome > 200 ? 0.003 : 0);
+      ax += dxHome * homeForce;
+      ay += dyHome * homeForce;
+
+      // Organic Lissajous & sinusoidal atmospheric wandering
+      const t = (now * 0.001) + this.timeOffset;
+      const wanderX = Math.cos(t * 1.1) * 0.22 + Math.sin(t * 2.3) * 0.12;
+      const wanderY = Math.sin(t * 0.9) * 0.20 + Math.cos(t * 1.7) * 0.15;
+      ax += wanderX;
+      ay += wanderY;
+
+      // Integrate velocity with gentle air resistance
+      const friction = this.mode === 'glide' ? 0.975 : 0.94;
+      this.vx = (this.vx + ax) * friction;
+      this.vy = (this.vy + ay) * friction;
+
+      // Clamp max velocity
+      const maxSpeed = 3.2 + this.evasionAlert * 2.0;
+      const currentSpeed = Math.hypot(this.vx, this.vy);
+      if (currentSpeed > maxSpeed) {
+        this.vx = (this.vx / currentSpeed) * maxSpeed;
+        this.vy = (this.vy / currentSpeed) * maxSpeed;
+      }
+
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Keep within bounds of sanctuary quadrant with soft padding
+      if (this.x > width - 15) { this.x = width - 15; this.vx *= -0.5; }
+      if (this.x < width * 0.45) { this.x = width * 0.45; this.vx *= -0.5; }
+      if (this.y < 15) { this.y = 15; this.vy *= -0.5; }
+      if (this.y > height * 0.55) { this.y = height * 0.55; this.vy *= -0.5; }
+
+      // Update heading angle towards movement vector with smooth interpolation
+      if (currentSpeed > 0.1) {
+        const targetAngle = Math.atan2(this.vy, this.vx) + Math.PI / 2;
+        let diff = targetAngle - this.heading;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        this.heading += diff * 0.12;
+      }
+
+      // Wing flapping speed & phase
+      if (this.mode === 'flutter' || this.evasionAlert > 0.2) {
+        const speedBoost = 1 + this.evasionAlert * 0.8;
+        this.wingSpeed = 0.32 * speedBoost;
+        this.wingPhase += this.wingSpeed;
+
+        if (Math.random() < 0.08) {
+          spawnSpore(this.x, this.y, isDarkMode);
+        }
+      } else {
+        this.wingSpeed = 0.04;
+        this.wingPhase += this.wingSpeed;
+      }
+    }
+
+    draw(ctx, isDarkMode) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.heading);
+
+      const s = this.scale;
+
+      // 3D Perspective Wing Flap illusion via horizontal cosine projection
+      let flapSpan;
+      if (this.mode === 'flutter' || this.evasionAlert > 0.2) {
+        flapSpan = Math.abs(Math.cos(this.wingPhase));
+        flapSpan = 0.08 + flapSpan * 0.92;
+      } else {
+        flapSpan = 0.82 + Math.sin(this.wingPhase) * 0.14;
+      }
+
+      // Palette selection matching active mode
+      const wingFill = isDarkMode
+        ? 'rgba(255, 255, 255, 0.82)'
+        : 'rgba(38, 45, 56, 0.78)';
+      const wingAccent = isDarkMode
+        ? 'rgba(235, 245, 255, 0.45)'
+        : 'rgba(50, 60, 75, 0.35)';
+      const bodyColor = isDarkMode
+        ? 'rgba(220, 230, 245, 0.92)'
+        : 'rgba(25, 30, 38, 0.88)';
+      const glowColor = isDarkMode
+        ? 'rgba(255, 255, 255, 0.45)'
+        : 'rgba(60, 75, 95, 0.25)';
+
+      // Soft ethereal atmospheric radiance
+      ctx.shadowColor = glowColor;
+      ctx.shadowBlur = isDarkMode ? 10 * s : 4 * s;
+
+      // Left Wing
+      ctx.save();
+      ctx.scale(-flapSpan, 1);
+      this.drawHalfWings(ctx, s, wingFill, wingAccent);
+      ctx.restore();
+
+      // Right Wing
+      ctx.save();
+      ctx.scale(flapSpan, 1);
+      this.drawHalfWings(ctx, s, wingFill, wingAccent);
+      ctx.restore();
+
+      ctx.shadowBlur = 0;
+
+      // Slender Body & Antennae
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.ellipse(0, 1 * s, 1.1 * s, 6.5 * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Head
+      ctx.beginPath();
+      ctx.arc(0, -6 * s, 1.4 * s, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Delicate curved antennae
+      ctx.strokeStyle = bodyColor;
+      ctx.lineWidth = 0.75 * s;
+      ctx.lineCap = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(-0.5 * s, -7 * s);
+      ctx.quadraticCurveTo(-3 * s, -11 * s, -5 * s, -12 * s);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0.5 * s, -7 * s);
+      ctx.quadraticCurveTo(3 * s, -11 * s, 5 * s, -12 * s);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    drawHalfWings(ctx, s, wingFill, wingAccent) {
+      // Forewing (Upper Wing)
+      ctx.beginPath();
+      ctx.moveTo(0.8 * s, -1 * s);
+      ctx.bezierCurveTo(6 * s, -11 * s, 14 * s, -15 * s, 17.5 * s, -9 * s);
+      ctx.bezierCurveTo(18.5 * s, -4 * s, 14 * s, 3 * s, 1.5 * s, 2 * s);
+      ctx.closePath();
+      ctx.fillStyle = wingFill;
+      ctx.fill();
+
+      // Hindwing (Lower Wing)
+      ctx.beginPath();
+      ctx.moveTo(1 * s, 1.5 * s);
+      ctx.bezierCurveTo(11 * s, 4 * s, 14 * s, 12 * s, 8.5 * s, 16 * s);
+      ctx.bezierCurveTo(4 * s, 16.5 * s, 0.5 * s, 12 * s, 0.5 * s, 4 * s);
+      ctx.closePath();
+      ctx.fillStyle = wingFill;
+      ctx.fill();
+
+      // Delicate inner wing-cell vein accents
+      ctx.beginPath();
+      ctx.moveTo(1.2 * s, -1 * s);
+      ctx.quadraticCurveTo(8 * s, -7 * s, 13 * s, -6 * s);
+      ctx.moveTo(1.2 * s, -1 * s);
+      ctx.quadraticCurveTo(7 * s, -3 * s, 11 * s, 0.5 * s);
+      ctx.strokeStyle = wingAccent;
+      ctx.lineWidth = 0.6 * s;
+      ctx.stroke();
+    }
+  }
+
+  // Three harmonious butterflies
+  const butterflies = [
+    new Butterfly(1, 1.15, -15, -20),
+    new Butterfly(2, 0.88, 38, -5),
+    new Butterfly(3, 0.65, 12, 35)
+  ];
+
+  // Pause rendering when tab is hidden to save 100% CPU/battery
+  document.addEventListener('visibilitychange', () => {
+    isTabActive = !document.hidden;
+    if (isTabActive) {
+      if (!animId) {
+        animId = requestAnimationFrame(renderLoop);
+      }
+    } else if (animId) {
+      cancelAnimationFrame(animId);
+      animId = null;
+    }
+  });
+
+  // Main animation render loop
+  function renderLoop(now) {
+    if (!isTabActive) return;
+
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Glowing dust motes
+    for (let i = spores.length - 1; i >= 0; i--) {
+      const sp = spores[i];
+      sp.x += sp.vx;
+      sp.y += sp.vy;
+      sp.alpha -= sp.decay;
+
+      if (sp.alpha <= 0) {
+        spores.splice(i, 1);
+        continue;
+      }
+
+      ctx.save();
+      const sporeGlow = sp.isDark
+        ? `rgba(255, 255, 255, ${sp.alpha})`
+        : `rgba(60, 70, 85, ${sp.alpha * 0.75})`;
+      ctx.fillStyle = sporeGlow;
+      ctx.shadowColor = sp.isDark ? 'rgba(255, 255, 255, 0.6)' : 'transparent';
+      ctx.shadowBlur = sp.isDark ? 5 : 0;
+      ctx.beginPath();
+      ctx.arc(sp.x, sp.y, sp.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Render butterflies
+    butterflies.forEach((b) => {
+      b.update(now, isDarkMode);
+      b.draw(ctx, isDarkMode);
+    });
+
+    animId = requestAnimationFrame(renderLoop);
+  }
+
+  animId = requestAnimationFrame(renderLoop);
+}
+
+// -----------------------------------------------------------------------------
 // Lifecycle Initialization
 // -----------------------------------------------------------------------------
 
@@ -427,5 +792,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveProjects();
   initCustomStatus();
   initFooterQuote();
+  initButterflySanctuary();
   printConsoleWelcome();
 });
