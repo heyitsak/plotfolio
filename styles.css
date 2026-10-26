@@ -160,6 +160,21 @@ button {
 }
 
 /* --------------------------------------------------------------------------
+   Atmospheric Floral Duality Canvas (Pure White Lily & Black Spider Lily)
+   -------------------------------------------------------------------------- */
+.floral-sanctuary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.95;
+  transition: opacity 0.5s ease;
+}
+
+/* --------------------------------------------------------------------------
    Site Navigation
    -------------------------------------------------------------------------- */
 .site-header {
