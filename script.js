@@ -782,6 +782,52 @@ function initButterflySanctuary() {
 }
 
 // -----------------------------------------------------------------------------
+// The True North Star (Subtle Dedication to Ak's Wife)
+// -----------------------------------------------------------------------------
+
+function initTrueNorthStar() {
+  const star = document.getElementById('true-north-star');
+  const whisper = document.getElementById('true-north-whisper');
+  if (!star || !whisper) return;
+
+  const whisperMessages = [
+    "“My anchor across every ocean.”",
+    "“In an endless sea of uncharted waters, you are my True North.”",
+    "“The one treasure that makes every voyage worth returning from.”",
+    "“My constant star in an expanding universe.”"
+  ];
+
+  let currentIdx = 0;
+  const quoteEl = whisper.querySelector('.whisper-quote');
+
+  star.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentIdx = (currentIdx + 1) % whisperMessages.length;
+    if (quoteEl) {
+      quoteEl.style.opacity = '0';
+      setTimeout(() => {
+        quoteEl.textContent = whisperMessages[currentIdx];
+        quoteEl.style.opacity = '1';
+      }, 150);
+    }
+    whisper.classList.toggle('active');
+  });
+
+  // Close whisper when clicking anywhere else
+  document.addEventListener('click', (e) => {
+    if (!star.contains(e.target) && !whisper.contains(e.target)) {
+      whisper.classList.remove('active');
+    }
+  });
+
+  // Dedicated quiet DevTools console love note
+  console.log(
+    '%c★ Dedicated to my beloved wife — my True North across every ocean.',
+    'color: #fde047; font-style: italic; font-size: 11px; padding: 4px 0;'
+  );
+}
+
+// -----------------------------------------------------------------------------
 // Lifecycle Initialization
 // -----------------------------------------------------------------------------
 
@@ -793,5 +839,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initCustomStatus();
   initFooterQuote();
   initButterflySanctuary();
+  initTrueNorthStar();
   printConsoleWelcome();
 });

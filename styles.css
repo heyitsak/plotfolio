@@ -160,6 +160,170 @@ button {
 }
 
 /* --------------------------------------------------------------------------
+   The True North Star (Polaris — Subtle Dedication to Ak's Wife)
+   -------------------------------------------------------------------------- */
+.true-north-container {
+  position: fixed;
+  top: 76px;
+  right: 36px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+.true-north-star {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  animation: polaris-breathe 4.5s ease-in-out infinite;
+  outline: none;
+}
+
+.true-north-star:hover,
+.true-north-star:focus-visible {
+  transform: scale(1.22);
+  animation-play-state: paused;
+}
+
+.true-north-star .star-svg {
+  width: 28px;
+  height: 28px;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.65));
+}
+
+.true-north-star .star-halo {
+  fill: rgba(253, 224, 71, 0.22);
+  transition: fill 0.3s ease, r 0.3s ease;
+}
+
+.true-north-star:hover .star-halo {
+  fill: rgba(253, 224, 71, 0.42);
+  r: 13;
+}
+
+.true-north-star .star-core {
+  fill: #fef08a;
+  transition: fill 0.3s ease;
+}
+
+.true-north-star .star-center {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 4px #ffffff);
+}
+
+/* Light mode adaptation */
+[data-theme="light"] .true-north-star .star-core {
+  fill: #d97706;
+}
+[data-theme="light"] .true-north-star .star-halo {
+  fill: rgba(217, 119, 6, 0.18);
+}
+[data-theme="light"] .true-north-star .star-svg {
+  filter: drop-shadow(0 0 5px rgba(217, 119, 6, 0.4));
+}
+
+@keyframes polaris-breathe {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.78;
+    filter: drop-shadow(0 0 4px rgba(253, 224, 71, 0.4));
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(253, 224, 71, 0.85));
+  }
+}
+
+/* Whisper Popover / Floating Ribbon */
+.true-north-whisper {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(253, 224, 71, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(253, 224, 71, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+  pointer-events: none;
+}
+
+[data-theme="light"] .true-north-whisper {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(217, 119, 6, 0.35);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 0 15px rgba(217, 119, 6, 0.15);
+}
+
+.true-north-whisper.active,
+.true-north-container:hover .true-north-whisper,
+.true-north-star:focus-visible + .true-north-whisper {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.whisper-quote {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fef08a;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  font-style: italic;
+  transition: opacity 0.15s ease;
+}
+
+[data-theme="light"] .whisper-quote {
+  color: #b45309;
+}
+
+.whisper-sub {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .whisper-sub {
+  color: rgba(30, 41, 59, 0.65);
+}
+
+@media (max-width: 768px) {
+  .true-north-container {
+    top: 68px;
+    right: 18px;
+  }
+  .true-north-whisper {
+    max-width: 230px;
+    padding: 8px 12px;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Site Navigation
    -------------------------------------------------------------------------- */
 .site-header {
